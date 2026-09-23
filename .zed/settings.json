@@ -1,0 +1,23 @@
+{
+  "diagnostics_max_severity": null,
+  "project_panel": {
+    "show_diagnostics": "all"
+  },
+  "scrollbar": {
+    "diagnostics": "all"
+  },
+  "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        "cargo": {
+          "allTargets": true
+        },
+        "checkOnSave": true,
+        "check": {
+          "allTargets": true,
+          "workspace": true
+        }
+      }
+    }
+  }
+}

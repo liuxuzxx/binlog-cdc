@@ -1,0 +1,59 @@
+[package]
+name = "flink-cdc-rs"
+version = "1.2.0"
+edition = "2024"
+
+[dependencies]
+axum = "0.8.6"
+base64 = "0.22.1"
+chrono = { workspace = true }
+clap = { workspace = true }
+futures-util = "0.3.31"
+moka = { version = "0.12.12", features = ["sync"] }
+mysql-binlog-connector-rust = "0.3.3"
+prometheus-client = "0.24.0"
+rdkafka = { version = "0.38.0", features = ["cmake-build"] }
+regex = "1.12.2"
+rocketmq-client-v4 = "0.4.2"
+rskafka = "0.6.0"
+rust_decimal = { version = "1.39.0", features = ["serde"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = { version = "1.0.145", features = ["preserve_order"] }
+serde_yaml = "0.9.34"
+sqlparser = { version = "0.59.0", features = ["serde", "visitor"] }
+sqlx = { version = "0.8.6", features = [
+    "mysql",
+    "runtime-tokio",
+    "tls-native-tls",
+] }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+url = "2.5.7"
+tikv-jemallocator = { workspace = true }
+hashbrown = { workspace = true }
+thiserror = { workspace = true }
+dashmap = { workspace = true }
+crossbeam-channel = "0.5.15"
+rand = "0.8"
+rayon = { workspace = true }
+walkdir = "2.5.0"
+zip = { version = "7.0.0", default-features = false, features = [
+    "deflate",
+    "bzip2",
+    "zstd",
+] }
+globwalk = "0.9.1"
+sea-query = {version = "1.0.2",features = ["backend-mysql","with-json"]}
+sea-query-sqlx = "0.8.1"
+
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+panic = 'abort'
+codegen-units = 1
+strip = true
+lto = true
+opt-level = 3
+debug = true

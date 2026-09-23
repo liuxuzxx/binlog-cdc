@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug binlog-cdc",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/target/debug/binlog-cdc",
+            "args": [
+                "--flink-cdc",
+                "${workspaceFolder}/config-5.7.10.yaml"
+            ],
+            "cwd": "${workspaceFolder}",
+            "sourceLanguages": [
+                "rust"
+            ],
+            "preLaunchTask": "cargo build",
+            "env": {
+                "RUST_LOG": "debug",
+                "RUST_BACKTRACE": "1"
+            },
+            "console": "integratedTerminal"
+        }
+    ]
+}

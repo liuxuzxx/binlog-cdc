@@ -1,0 +1,15 @@
+source:
+  type: console
+  name: console
+sink:
+  type: kafka
+  name: Kafka-sink
+  properties.bootstrap.servers: 127.0.0.1:9092
+  properties.compression.type: lz4
+  properties.max.request.size: 41943040
+  properties.max.message.bytes: 41943040
+  topic: cdc-events
+pipeline:
+  name: console to kafka
+  parallelism: 2
+  channel.capacity: 10

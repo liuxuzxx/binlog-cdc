@@ -1,0 +1,21 @@
+[package]
+name = "flink-cdc-init"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+chrono = { workspace = true }
+clap = { workspace = true }
+futures-util = "0.3.31"
+rdkafka = { version = "0.38.0", features = ["cmake-build"] }
+regex = "1.12.2"
+rskafka = "0.6.0"
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = { version = "1.0.145", features = ["preserve_order"] }
+serde_yaml = "0.9.34"
+sqlx = { version = "0.8.6", features = ["mysql", "runtime-tokio", "tls-native-tls"] }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+url = "2.5.7"

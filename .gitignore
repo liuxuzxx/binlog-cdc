@@ -1,0 +1,37 @@
+# Rust build artifacts
+target/
+
+# Build scripts
+build.sh
+
+# Configuration files (may contain sensitive data)
+savepoints/
+test-config.yaml
+kafka-to-mysql.yaml
+config.yaml
+flink-cdc.yaml
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local secrets and environment-specific overrides
+.env
+.env.*
+*.local.yaml
+*.local.yml
+*.private.yaml
+*.private.yml
+*secret*.yaml
+*secret*.yml
+*credentials*.yaml
+*credentials*.yml
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks

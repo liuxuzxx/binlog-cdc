@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flink-cdc-oom-lab
+  namespace: default
+  labels:
+    app: flink-cdc-oom-lab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flink-cdc-oom-lab
+  template:
+    metadata:
+      labels:
+        app: flink-cdc-oom-lab
+        application: flink-cdc-oom-lab
+    spec:
+      terminationGracePeriodSeconds: 5
+      containers:
+        - name: workload
+          image: ghcr.io/example/binlog-cdc-oom-lab:latest
+          imagePullPolicy: Always
+          command: ["/bin/bash", "-ec"]
+          args:
+            - |
+              exec /opt/flink-cdc-oom-lab                 --mode="${LAB_MODE}"                 --payload="${LAB_PAYLOAD}"                 --queue="${LAB_QUEUE}"                 --warmup-rate="${WARMUP_RATE}"                 --warmup-seconds="${WARMUP_SECONDS}"                 --peak-rate="${PEAK_RATE}"                 --peak-seconds="${PEAK_SECONDS}"                 --burst-rate="${BURST_RATE}"                 --burst-seconds="${BURST_SECONDS}"                 --recovery-rate="${RECOVERY_RATE}"                 --recovery-seconds="${RECOVERY_SECONDS}"                 --settle-seconds="${SETTLE_SECONDS}"
+          env: &lab-env
+            - name: KAFKA_BROKERS
+              value: "kafka:9092"
+            - name: KAFKA_TOPIC
+              value: "kafka-press"
+            - name: LAB_MODE
+              value: "drop"
+            - name: LAB_PAYLOAD
+              value: "mixed"
+            - name: LAB_QUEUE
+              value: "default"
+            - name: WARMUP_RATE
+              value: "100"
+            - name: WARMUP_SECONDS
+              value: "300"
+            - name: PEAK_RATE
+              value: "3000"
+            - name: PEAK_SECONDS
+              value: "600"
+            - name: BURST_RATE
+              value: "10000"
+            - name: BURST_SECONDS
+              value: "30"
+            - name: RECOVERY_RATE
+              value: "100"
+            - name: RECOVERY_SECONDS
+              value: "300"
+            - name: SETTLE_SECONDS
+              value: "10"
+          ports:
+            - name: metrics
+              containerPort: 9249
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: metrics
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "128Mi"
+            limits:
+              cpu: "4"
+              memory: "512Mi"
+        - name: fault-injector
+          image: ghcr.io/example/binlog-cdc-oom-lab:latest
+          imagePullPolicy: Always
+          command: ["/bin/bash", "-ec", "sleep infinity"]
+          env: *lab-env
+          securityContext:
+            capabilities:
+              add: ["NET_ADMIN"]
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "16Mi"
+            limits:
+              cpu: "100m"
+              memory: "32Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flink-cdc-oom-lab
+  namespace: default
+  labels:
+    app: flink-cdc-oom-lab
+    application: flink-cdc-oom-lab
+spec:
+  selector:
+    app: flink-cdc-oom-lab
+  ports:
+    - name: metrics
+      port: 9249
+      targetPort: metrics
