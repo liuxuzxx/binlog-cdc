@@ -1058,7 +1058,7 @@ dependencies = [
 
 [[package]]
 name = "flink-cdc-init"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "chrono",
  "clap",
@@ -1079,7 +1079,7 @@ dependencies = [
 
 [[package]]
 name = "flink-cdc-rs"
-version = "1.2.0"
+version = "1.0.0"
 dependencies = [
  "axum",
  "base64 0.22.1",

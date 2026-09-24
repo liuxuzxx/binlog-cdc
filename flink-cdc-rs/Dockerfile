@@ -1,7 +1,10 @@
-FROM ubuntu:24.10
+FROM ubuntu:24.04
 
-COPY ../target/release/flink-cdc-rs /opt
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates libssl3t64 liblzma5 zlib1g libgcc-s1 \
+    && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /opt
+COPY flink-cdc-rs /usr/local/bin/flink-cdc-rs
 
-ENTRYPOINT ["/opt/flink-cdc-rs"]
+WORKDIR /app
+ENTRYPOINT ["/usr/local/bin/flink-cdc-rs"]

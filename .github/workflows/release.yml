@@ -1,0 +1,36 @@
+name: Release binaries
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  linux-binaries:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out release commit
+        uses: actions/checkout@v4
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y cmake pkg-config libssl-dev liblzma-dev
+      - name: Build locked release binaries
+        run: cargo build --locked --release -p flink-cdc-rs -p flink-cdc-init
+      - name: Package binaries
+        run: |
+          mkdir -p dist
+          tar -C target/release -czf dist/flink-cdc-rs-linux-x86_64.tar.gz flink-cdc-rs
+          tar -C target/release -czf dist/flink-cdc-init-linux-x86_64.tar.gz flink-cdc-init
+          cd dist
+          sha256sum *.tar.gz > SHA256SUMS
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/*.tar.gz dist/SHA256SUMS \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "$GITHUB_REF_NAME" \
+            --notes-file "docs/releases/$GITHUB_REF_NAME.md" \
+            --verify-tag

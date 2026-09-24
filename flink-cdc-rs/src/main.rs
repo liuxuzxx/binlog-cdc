@@ -69,7 +69,7 @@ async fn init_axum(registry: Arc<Mutex<Registry>>) {
 }
 
 async fn version() -> &'static str {
-    "0.1.0"
+    env!("CARGO_PKG_VERSION")
 }
 async fn metrics_handler(State(state): State<Arc<Mutex<Registry>>>) -> impl IntoResponse {
     let state = state.lock().await;
